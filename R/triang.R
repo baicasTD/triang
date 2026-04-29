@@ -18,11 +18,19 @@ dtriang <- function(x, min, max, mode) {
   b <- max
   c <- mode
 
-  dens <- ifelse(x < a | x > b, 0,
-                 ifelse(x <= c,
-                        2 * (x - a) / ((b - a) * (c - a)),
-                        2 * (b - x) / ((b - a) * (b - c))
-                 ))
+  dens <- numeric(length(x))
+
+  # fuera del rango
+  idx0 <- x < a | x > b
+  dens[idx0] <- 0
+
+  # tramo creciente
+  idx1 <- x >= a & x <= c
+  dens[idx1] <- 2 * (x[idx1] - a) / ((b - a) * (c - a))
+
+  # tramo decreciente
+  idx2 <- x > c & x <= b
+  dens[idx2] <- 2 * (b - x[idx2]) / ((b - a) * (b - c))
 
   return(dens)
 }
@@ -45,12 +53,21 @@ ptriang <- function(q, min, max, mode) {
   b <- max
   c <- mode
 
-  F <- ifelse(q < a, 0,
-              ifelse(q <= c,
-                     ((q - a)^2) / ((b - a) * (c - a)),
-                     ifelse(q <= b,
-                            1 - ((b - q)^2) / ((b - a) * (b - c)),
-                            1)))
+  F <- numeric(length(q))
+
+  # izquierda
+  F[q < a] <- 0
+
+  # tramo creciente
+  idx1 <- q >= a & q <= c
+  F[idx1] <- ((q[idx1] - a)^2) / ((b - a) * (c - a))
+
+  # tramo decreciente
+  idx2 <- q > c & q <= b
+  F[idx2] <- 1 - ((b - q[idx2])^2) / ((b - a) * (b - c))
+
+  # derecha
+  F[q > b] <- 1
 
   return(F)
 }
@@ -76,9 +93,13 @@ qtriang <- function(p, min, max, mode) {
 
   pc <- (c - a) / (b - a)
 
-  q <- ifelse(p <= pc,
-              a + sqrt(p * (b - a) * (c - a)),
-              b - sqrt((1 - p) * (b - a) * (b - c)))
+  q <- numeric(length(p))
+
+  idx1 <- p <= pc
+  q[idx1] <- a + sqrt(p[idx1] * (b - a) * (c - a))
+
+  idx2 <- p > pc
+  q[idx2] <- b - sqrt((1 - p[idx2]) * (b - a) * (b - c))
 
   return(q)
 }
@@ -98,7 +119,5 @@ rtriang <- function(n, min, max, mode) {
   if (n <= 0) stop("n must be > 0")
 
   u <- runif(n)
-  x <- qtriang(u, min, max, mode)
-
-  return(x)
+  qtriang(u, min, max, mode)
 }
