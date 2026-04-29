@@ -91,7 +91,7 @@ qtriang <- function(p, min, max, mode) {
 #' @param mode Mode
 #'
 #' @return Numeric vector
-#' @importFrom stats run
+#' @importFrom stats runif
 #' @export
 rtriang <- function(n, min, max, mode) {
 
