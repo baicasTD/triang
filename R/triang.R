@@ -53,23 +53,23 @@ ptriang <- function(q, min, max, mode) {
   b <- max
   c <- mode
 
-  F <- numeric(length(q))
+  cdf <- numeric(length(q))
 
   # izquierda
-  F[q < a] <- 0
+  cdf[q < a] <- 0
 
   # tramo creciente
   idx1 <- q >= a & q <= c
-  F[idx1] <- ((q[idx1] - a)^2) / ((b - a) * (c - a))
+  cdf[idx1] <- ((q[idx1] - a)^2) / ((b - a) * (c - a))
 
   # tramo decreciente
   idx2 <- q > c & q <= b
-  F[idx2] <- 1 - ((b - q[idx2])^2) / ((b - a) * (b - c))
+  cdf[idx2] <- 1 - ((b - q[idx2])^2) / ((b - a) * (b - c))
 
   # derecha
-  F[q > b] <- 1
+  cdf[q > b] <- 1
 
-  return(F)
+  return(cdf)
 }
 
 #' Triangular quantile function
