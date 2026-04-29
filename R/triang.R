@@ -1,3 +1,14 @@
+#' Triangular density function
+#'
+#' Computes the probability density function of the triangular distribution.
+#'
+#' @param x Numeric vector of values
+#' @param min Lower bound
+#' @param max Upper bound
+#' @param mode Mode of the distribution
+#'
+#' @return Numeric vector of densities
+#' @export
 dtriang <- function(x, min, max, mode) {
 
   if (min >= max) stop("min must be < max")
@@ -16,6 +27,15 @@ dtriang <- function(x, min, max, mode) {
   return(dens)
 }
 
+#' Triangular cumulative distribution function
+#'
+#' @param q Numeric vector
+#' @param min Lower bound
+#' @param max Upper bound
+#' @param mode Mode
+#'
+#' @return Numeric vector
+#' @export
 ptriang <- function(q, min, max, mode) {
 
   if (min >= max) stop("min must be < max")
@@ -35,6 +55,15 @@ ptriang <- function(q, min, max, mode) {
   return(F)
 }
 
+#' Triangular quantile function
+#'
+#' @param p Numeric vector of probabilities
+#' @param min Lower bound
+#' @param max Upper bound
+#' @param mode Mode
+#'
+#' @return Numeric vector
+#' @export
 qtriang <- function(p, min, max, mode) {
 
   if (min >= max) stop("min must be < max")
@@ -54,6 +83,15 @@ qtriang <- function(p, min, max, mode) {
   return(q)
 }
 
+#' Random generation from triangular distribution
+#'
+#' @param n Number of observations
+#' @param min Lower bound
+#' @param max Upper bound
+#' @param mode Mode
+#'
+#' @return Numeric vector
+#' @export
 rtriang <- function(n, min, max, mode) {
 
   if (n <= 0) stop("n must be > 0")
