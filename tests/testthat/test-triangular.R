@@ -66,3 +66,40 @@ test_that("vectorization", {
 
   expect_equal(length(res), length(x))
 })
+
+test_that("extra validation coverage", {
+
+  expect_error(ptriang(5, 10, 0, 5))   # min >= max
+  expect_error(ptriang(5, 0, 10, -1))  # mode fuera
+
+  expect_error(qtriang(0.5, 10, 0, 5))  # parámetros incorrectos
+
+})
+
+test_that("boundary transitions", {
+
+  # justo en el modo
+  expect_equal(ptriang(5, 0, 10, 5), 0.5)
+
+  # justo antes del modo
+  expect_true(ptriang(4.999, 0, 10, 5) < 0.5)
+
+  # justo después del modo
+  expect_true(ptriang(5.001, 0, 10, 5) > 0.5)
+})
+
+test_that("qtriang transition point", {
+
+  pc <- (5 - 0)/(10 - 0)
+
+  expect_equal(qtriang(pc, 0, 10, 5), 5)
+})
+
+test_that("ptriang extra values", {
+
+  expect_true(ptriang(1, 0, 10, 5) > 0)
+  expect_true(ptriang(9, 0, 10, 5) < 1)
+
+})
+
+
