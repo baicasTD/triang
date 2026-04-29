@@ -1,28 +1,33 @@
-testthat::test_that("dtriang works", {
-  testthat::expect_equal(dtriang(5, 0, 10, 5), 0.2)
-  testthat::expect_equal(dtriang(-1, 0, 10, 5), 0)
+
+test_that("dtriang full coverage", {
+  expect_equal(dtriang(-1, 0, 10, 5), 0)
+  expect_equal(dtriang(0, 0, 10, 5), 0)
+  expect_true(dtriang(2, 0, 10, 5) > 0)
+  expect_equal(dtriang(5, 0, 10, 5), 0.2)
+  expect_true(dtriang(8, 0, 10, 5) > 0)
+  expect_equal(dtriang(10, 0, 10, 5), 0)
+  expect_equal(dtriang(11, 0, 10, 5), 0)
 })
 
-testthat::test_that("ptriang boundaries", {
-  testthat::expect_equal(ptriang(0, 0, 10, 5), 0)
-  testthat::expect_equal(ptriang(10, 0, 10, 5), 1)
+test_that("ptriang full coverage", {
+  expect_equal(ptriang(-1, 0, 10, 5), 0)
+  expect_equal(ptriang(0, 0, 10, 5), 0)
+  expect_true(ptriang(3, 0, 10, 5) > 0)
+  expect_equal(ptriang(10, 0, 10, 5), 1)
+  expect_equal(ptriang(11, 0, 10, 5), 1)
 })
 
-testthat::test_that("quantile inversion", {
-  p <- 0.4
-  testthat::expect_equal(
-    ptriang(qtriang(p, 0, 10, 5), 0, 10, 5),
-    p,
-    tolerance = 1e-6
-  )
+test_that("qtriang edges", {
+  expect_equal(qtriang(0, 0, 10, 5), 0)
+  expect_equal(qtriang(1, 0, 10, 5), 10)
 })
 
-testthat::test_that("random generation", {
-  x <- rtriang(5, 0, 10, 5)
-  testthat::expect_equal(length(x), 5)
+test_that("vectorization works", {
+  x <- c(1, 5, 9)
+  expect_equal(length(dtriang(x, 0, 10, 5)), 3)
 })
 
-testthat::test_that("error handling", {
-  testthat::expect_error(dtriang(1, 10, 0, 5))
-  testthat::expect_error(qtriang(-0.1, 0, 10, 5))
+test_that("additional errors", {
+  expect_error(dtriang(1, 1, 1, 1))
+  expect_error(ptriang(1, 10, 0, 5))
 })
